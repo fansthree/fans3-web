@@ -1,0 +1,140 @@
+:host {
+  &[disabled],
+  &:disabled,
+  &.disabled,
+  &.pending {
+    @apply pointer-events-none cursor-not-allowed;
+  }
+}
+
+.ui-button {
+  @apply gap-1 text-black py-2 leading-tight text-sm sm_text-base rounded-md border border-black;
+  background: var(--btnBg);
+  &:not([dense]) {
+    @apply px-3.5;
+  }
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+  &:not([disabled]) {
+    &:hover {
+      background: var(--btnBgHover);
+      border-color: var(--btnBgHover);
+    }
+    &:active {
+      background: var(--btnBgActive);
+      border-color: var(--btnBgActive);
+    }
+  }
+  &[disabled],
+  &:disabled,
+  &[pending],
+  &.pending {
+    @apply !cursor-not-allowed !pointer-events-none;
+    background: #aaa !important;
+    &.outlined {
+      opacity: 0.75;
+    }
+  }
+  &.outlined {
+    background-color: transparent !important;
+    color: var(--btnBg);
+    border: 1px solid;
+    &:not([disabled]) {
+      &:hover {
+        background: #fff;
+        color: var(--btnBg);
+        border: 1px solid;
+      }
+      &:active {
+        background: #f6f6f6;
+        color: var(--btnBg);
+        border: 1px solid;
+      }
+    }
+  }
+  &.secondary {
+    background: var(--btnBgSecondary);
+    &:not([disabled]) {
+      &:hover {
+        background: var(--btnBgSecondaryHover);
+        border-color: var(--btnBgSecondaryHover);
+      }
+      &:active {
+        background: var(--btnBgSecondaryActive);
+        border-color: var(--btnBgSecondaryActive);
+      }
+    }
+    &.outlined {
+      color: var(--btnBgSecondary);
+      &:hover,
+      &:active {
+        color: var(--btnBgSecondary);
+      }
+    }
+  }
+  &.minor {
+    background: var(--btnBgSecondary);
+    &:not([disabled]) {
+      &:hover {
+        background: var(--btnBgSecondaryHover);
+        border-color: var(--btnBgSecondaryHover);
+      }
+      &:active {
+        background: var(--btnBgSecondaryActive);
+        border-color: var(--btnBgSecondaryActive);
+      }
+    }
+    &.outlined {
+      color: var(--btnBgSecondary);
+      &:hover,
+      &:active {
+        color: var(--btnBgSecondary);
+      }
+    }
+  }
+  &.success {
+    background: var(--btnBgSuccess);
+    &:not([disabled]) {
+      &:hover {
+        background: var(--btnBgSuccessHover);
+        border-color: var(--btnBgSuccessHover);
+      }
+      &:active {
+        background: var(--btnBgSuccessActive);
+        border-color: var(--btnBgSuccessActive);
+      }
+    }
+  }
+  &[text] {
+    color: var(--btnBg);
+    @apply bg-transparent border-transparent;
+    &:hover,
+    &:active {
+      color: var(--btnBg);
+      @apply bg-transparent;
+    }
+  }
+  &[icon] {
+    border-radius: 50%;
+    @apply inline-flex justify-center items-center text-current bg-transparent w-8 h-8;
+    &:hover,
+    &:active {
+      @apply text-white;
+    }
+  }
+  &[sm] {
+    @apply text-sm py-1.5;
+    &:not([dense]) {
+      @apply px-2.5;
+    }
+    &[icon] {
+      @apply w-8 h-8;
+    }
+  }
+  &[theme='dark'] {
+    background: var(--colorDark) !important;
+  }
+}

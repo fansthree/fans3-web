@@ -1,0 +1,5 @@
+:host {
+  &::part(dialog-container) {
+    min-height: 100px;
+  }
+}

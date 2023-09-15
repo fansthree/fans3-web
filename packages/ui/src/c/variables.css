@@ -1,0 +1,10 @@
+:root {
+  --txt: #333;
+  --txt2: #333;
+  --txt3: #222;
+}
+
+@media (max-width: 1024px) {
+  :root {
+  }
+}

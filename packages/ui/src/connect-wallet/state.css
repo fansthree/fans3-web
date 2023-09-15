@@ -1,0 +1,21 @@
+:host {
+  &::part(dialog-container) {
+  }
+}
+.connect-wallet-state {
+  & p > i {
+    margin-right: 0.5em;
+  }
+  &.success .connect-wallet-icon {
+    color: green;
+  }
+  &.failed .connect-wallet-icon {
+    color: red;
+  }
+}
+.connect-wallet-icon > i {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 1.625rem;
+  margin-bottom: 0.2em;
+}

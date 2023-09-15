@@ -1,0 +1,67 @@
+{
+  "name": "fans3",
+  "displayName": "fans3",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@8.7.0",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git"
+  },
+  "bugs": {
+  },
+  "dependencies": {
+    "@lit-app/state": "^0.8.4",
+    "@lit-labs/motion": "^1.0.4",
+    "@lit-labs/router": "^0.1.1",
+    "@webcomponents/webcomponentsjs": "^2.8.0",
+    "cross-env": "^7.0.3",
+    "ethers": "^6.7.1",
+    "lit": "^2.8.0",
+    "lodash": "^4.17.21",
+    "urlpattern-polyfill": "^9.0.0"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.108",
+    "@rollup/plugin-inject": "^5.0.3",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@vitejs/plugin-legacy": "^4.1.1",
+    "autoprefixer": "^10.4.15",
+    "dotenv": "^16.3.1",
+    "loglevel": "^1.8.1",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.29",
+    "postcss-import": "^15.1.0",
+    "postcss-nesting": "^11.3.0",
+    "postcss-preset-env": "^8.5.1",
+    "prettier": "^3.0.3",
+    "rollup": "^3.28.1",
+    "rollup-plugin-minify-html-literals": "^1.2.6",
+    "sass": "^1.66.1",
+    "tailwindcss": "^3.3.3",
+    "terser": "^5.19.3",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "unplugin-auto-import": "^0.15.3",
+    "vite": "^4.4.9",
+    "vite-plugin-html": "^3.2.0",
+    "vite-plugin-mkcert": "^1.16.0",
+    "vite-plugin-pwa": "^0.16.4",
+    "vite-plugin-static-copy": "^0.17.0"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "browserslist": {
+    "production": [
+      "defaults",
+      "not IE > 0"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

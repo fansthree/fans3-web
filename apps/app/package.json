@@ -1,0 +1,16 @@
+{
+  "name": "@fans3/app",
+  "version": "0.7.1",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host --mode development",
+    "build": "vite build",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@fans3/ui": "workspace:latest",
+    "@fans3/core": "workspace:latest"
+  },
+  "license": "MIT"
+}

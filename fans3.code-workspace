@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "extensions.enabled": [
+      "bierner.lit-html",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "lukas-tr.materialdesignicons-intellisense"
+    ],
+    "editor.tabSize": 2,
+    "iconify.inplace": false
+  }
+}

@@ -1,0 +1,21 @@
+:host {
+  @apply z-50 fixed flex justify-center items-center left-0 top-0 w-full h-full invisible px-4 lg_px-0;
+  &::part(dialog-container) {
+    width: 400px;
+    @apply w-full lg_w-96;
+    max-width: var(--appMaxW);
+    min-height: 300px;
+  }
+  &::part(dialog-close) {
+  }
+  &::part(dialog-header) {
+  }
+  &::part(dialog-body) {
+    min-height: 9rem;
+  }
+  &::part(dialog-footer) {
+  }
+}
+.dialog-header-icons {
+  @apply text-xl;
+}

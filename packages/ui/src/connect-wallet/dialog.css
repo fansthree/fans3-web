@@ -1,0 +1,42 @@
+:host {
+  &::part(dialog-container) {
+  }
+  &::part(dialog-body) {
+    @apply pb-0;
+  }
+}
+i.i.wallet-logo {
+  @apply inline-flex mt-8 w-16 h-16 items-center justify-center text-xl bg-no-repeat bg-center;
+}
+
+.connect-wallet-list {
+  @apply m-4 flex flex-col max-w-full;
+  & > li {
+    @apply justify-between items-center p-4 flex m-0 rounded-lg whitespace-normal break-words text-lg;
+    transition: all 0.3s ease-out;
+    box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.4);
+    & i.i {
+      @apply w-6 h-6 m-0 mr-4 bg-no-repeat;
+    }
+    & .mdi-loading {
+      font-size: 2rem;
+      color: green;
+    }
+    &:hover {
+      cursor: pointer;
+      box-shadow: 0 0 12px -1px rgba(0, 0, 0, 0.4);
+      & .mdi {
+        color: #6256ff;
+      }
+    }
+    &.label {
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
+.connect-wallet-intro {
+  @apply m-4 mb-0 mt-6 p-4 text-xs max-w-full break-words rounded-lg;
+  /* box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.4); */
+  background: rgba(0, 0, 0, 0.03);
+}

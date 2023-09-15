@@ -1,0 +1,20 @@
+@import './variables.css';
+
+html,
+body {
+  @apply p-0 m-0 h-full;
+}
+html {
+  @apply overflow-y-scroll scroll-smooth leading-normal;
+  color: var(--textColor);
+}
+body {
+  font-size: var(--textBase);
+}
+body,
+input,
+textarea,
+select,
+button {
+  font-family: var(--fontFamily);
+}

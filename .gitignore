@@ -1,0 +1,26 @@
+auto-imports.d.ts
+*.zip
+*.xpi
+*.rdb
+*.pem
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+*.log
+
+tests/unit/coverage
+tests/e2e/reports
+selenium-debug.log
+**/backup**/
+
+# Editor directories and files
+Thumbs.db
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

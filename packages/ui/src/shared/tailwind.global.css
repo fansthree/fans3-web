@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .app-main {
+    @apply float-left w-full pb-4 lg_pb-12;
+    min-height: var(--appMainH);
+    background: var(--appMainBg);
+  }
+  .ui-container {
+    @apply clear-both lg_max-w-5xl min-h-full mx-auto px-3 lg_px-4;
+    &.sparse {
+      @apply px-4;
+    }
+  }
+  .ui-select {
+    @apply whitespace-nowrap;
+    & > li {
+      @apply flex items-center gap-2 py-2 px-4 hover_bg-gray-50 cursor-pointer;
+      &.active {
+        @apply bg-gray-100;
+      }
+      & > .mdi:first-child {
+        @apply text-gray-600;
+      }
+    }
+  }
+  .mdi-loading {
+    @apply inline-flex animate-spin;
+  }
+  .canScroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.24) rgba(0, 0, 0, 0.01);
+    overscroll-behavior: contain;
+    padding-right: 4px;
+    margin-right: -4px;
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar {
+      transition: background-color 0.3s;
+    }
+    /* Track */
+    &::-webkit-scrollbar-track {
+      border-radius: var(--radius);
+    }
+    /* Handle */
+    &::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-thumb:window-inactive {
+      transition: background-color 0.3s;
+      background-color: rgba(0, 0, 0, 0);
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: var(--radius);
+    }
+    &::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-thumb:window-inactive {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    &:hover {
+      &::-webkit-scrollbar-thumb,
+      &::-webkit-scrollbar-thumb:window-inactive {
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+}

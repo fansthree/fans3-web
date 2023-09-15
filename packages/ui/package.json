@@ -1,0 +1,17 @@
+{
+  "name": "@fans3/ui",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "tsup src/index.ts --outDir ./lib --format esm,cjs --dts --clean",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@fans3/core": "workspace:latest",
+    "@fans3/ethers": "workspace:latest"
+  },
+  "peerDependencies": {
+    "@lit-labs/router": "^0.1",
+    "tsup": "^6"
+  },
+  "license": "MIT"
+}

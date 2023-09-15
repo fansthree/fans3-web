@@ -1,0 +1,58 @@
+.ui-link {
+  @apply no-underline;
+  color: var(--a_color);
+  &:hover {
+    @apply underline;
+    color: var(--a_color);
+    text-decoration: underline;
+  }
+  &:not([disabled]) {
+    @apply cursor-pointer;
+  }
+  &[disabled] {
+    @apply pointer-events-none;
+  }
+  &.uri {
+    @apply text-current;
+    &:hover {
+      @apply text-current;
+      text-decoration: underline;
+    }
+  }
+  &.link {
+    color: var(--colorSecondary);
+    &:hover {
+      color: var(--colorSecondary);
+      text-decoration: underline;
+    }
+  }
+  &.router-active {
+  }
+  &[nav] {
+    @apply inline-flex border-y-2 border-transparent leading-4;
+    padding: 3px 0;
+    color: inherit;
+
+    &:hover {
+      color: var(--a_color);
+    }
+    &:hover {
+      @apply no-underline;
+    }
+    &[active],
+    &[exact-active] {
+      color: var(--a_color);
+      @apply border-b-current;
+    }
+  }
+  &[link] {
+    @apply underline;
+  }
+  &[text] {
+    @apply text-current underline;
+
+    &:hover {
+      @apply underline;
+    }
+  }
+}

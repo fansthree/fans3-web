@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {
+      "~/*": ["src/*"]
+    },
+    "sourceMap": false,
+    "noEmit": true,
+    "types": ["node"],
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext", "dom", "dom.Iterable"],
+    "strict": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": false,
+    "skipLibCheck": true,
+    "jsx": "preserve"
+  },
+  "include": ["**/*.ts", "**/*.d.ts"],
+  "exclude": ["public", "dist", "vendor", "node_modules", ".vscode", ".git"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
