@@ -4,12 +4,10 @@ import { goto } from '@fans3/ui/src/shared/router'
 // Components
 import '@fans3/ui/src/connect-wallet/btn'
 
-// Style
-import style from './index.css?inline'
 import logo from '~/assets/logo.svg'
 
-@customElement('view-home')
-export class ViewHome extends TailwindElement(style) {
+@customElement('view-ex')
+export class ViewEx extends TailwindElement({}) {
   bindBridge: any = new StateController(this, bridgeStore)
   @state() twitter = ''
 
@@ -21,13 +19,19 @@ export class ViewHome extends TailwindElement(style) {
     return { hidden: !this.account }
   }
 
-  get createClasses() {
+  get buyClasses() {
+    return { hidden: !this.twitter }
+  }
+
+  get sellClasses() {
     return { hidden: !this.twitter }
   }
 
   link() {}
 
-  create() {}
+  buy() {}
+
+  sell() {}
 
   render() {
     return html`<div class="home">
@@ -43,9 +47,13 @@ export class ViewHome extends TailwindElement(style) {
           Twitter:
           <ui-button sm class="my-2" @click=${this.link}>Link</ui-button>
         </div>
-        <div class="my-4 ${classMap(this.createClasses)}">
-          Create:
-          <ui-button sm class="my-2" @click=${this.create}>Link</ui-button>
+        <div class="my-4 ${classMap(this.buyClasses)}">
+          Buy:
+          <ui-button sm class="my-2" @click=${this.buy}>Link</ui-button>
+        </div>
+        <div class="my-4 ${classMap(this.sellClasses)}">
+          Sell:
+          <ui-button sm class="my-2" @click=${this.sell}>Link</ui-button>
         </div>
       </div>
     </div>`

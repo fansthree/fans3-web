@@ -120,9 +120,15 @@ importers:
       '@fans3/core':
         specifier: workspace:latest
         version: link:../../packages/core
+      '@fans3/ethers':
+        specifier: workspace:latest
+        version: link:../../packages/ethers
       '@fans3/ui':
         specifier: workspace:latest
         version: link:../../packages/ui
+      safe-decode-uri-component:
+        specifier: latest
+        version: 1.2.1
 
   packages/core:
     dependencies:
@@ -4882,6 +4888,10 @@ packages:
   /safe-buffer@5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
     dev: true
+
+  /safe-decode-uri-component@1.2.1:
+    resolution: {integrity: sha512-j0PKk0v8qPOD0goqRAvoI7GKy+HwLHXEpXaQlA1IqJ65jjiILRK1InlfNdIKUUUYuLtERADaJumgYKNfyQBO+w==}
+    dev: false
 
   /safe-regex-test@1.0.0:
     resolution: {integrity: sha512-JBUUzyOgEwXQY1NuPtvcj/qcBDbDmEvWufhlnXZIm75DEHp+afM1r1ujJpJsV/gSM4t59tpDyPi1sd6ZaPFfsA==}
