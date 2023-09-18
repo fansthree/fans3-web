@@ -7,17 +7,33 @@ import '@fans3/ui/src/connect-wallet/btn'
 import style from './index.css?inline'
 import logo from '~/assets/logo.svg'
 import { CONTRACT_ADDRESS } from '~/constants'
+import { sleep } from '@fans3/ethers/src/utils'
+import { SECOND } from '@fans3/core/src/constants/time'
+import { holding, twitterName } from '~/utils'
 
 @customElement('view-home')
 export class ViewHome extends TailwindElement(style) {
   bindBridge: any = new StateController(this, bridgeStore)
-  @state() twitter = ''
+  @state() twitter: any
   @state() creating = false
+  @state() linking = true
   @state() err: any
   @state() supply = 0
 
   get account() {
     return bridgeStore.account
+  }
+
+  updateTwitter() {
+    return fetch('http://147.139.3.9:8000/user?address=' + this.account)
+      .then((blob) => blob.json())
+      .then((data) => {
+        this.twitter = data
+        return ''
+      })
+      .finally(() => {
+        this.linking = false
+      })
   }
 
   @state()
@@ -33,8 +49,18 @@ export class ViewHome extends TailwindElement(style) {
       })
   })
 
-  link() {
-    this.twitter = 'VitalikButerin'
+  async link() {
+    this.linking = true
+    while (true) {
+      try {
+        let twitter = await fetch('http://147.139.3.9:8000/user?address=' + this.account, { mode: 'no-cors' })
+        this.twitter = await twitter.json()
+        return
+      } catch (e) {
+        console.log(e)
+      }
+      await sleep(SECOND)
+    }
   }
 
   async create() {
@@ -51,24 +77,18 @@ export class ViewHome extends TailwindElement(style) {
     this.creating = false
   }
 
-  holding(item: any) {
-    return getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
-      return contract
-        .sharesBalance(this.account, item)
-        .then((balance) => {
-          return balance
-        })
-        .catch(() => {
-          return 0
-        })
-    })
-  }
-
   @state()
   private holders = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
     return contract.getFansOfSubject(this.account).then((fans) => {
       return html`<ul>
-        ${repeat(fans, (item) => html` <li>${item}: ${until(this.holding(item))}</li>`)}
+        ${repeat(
+          fans,
+          (item) =>
+            html` <li>
+              ${item}(${until(twitterName(item), html`<i class="text-sm mdi mdi-loading"></i>`)}):
+              ${until(holding(this.account, item), html`<i class="text-sm mdi mdi-loading"></i>`)}
+            </li>`
+        )}
       </ul>`
     })
   })
@@ -84,12 +104,25 @@ export class ViewHome extends TailwindElement(style) {
           Wallet Address:
           <connect-wallet-btn></connect-wallet-btn>
         </div>
-        <div class="my-4 ${when(this.twitter, () => 'hidden')}">
-          Link your twitter to continue
-          <!-- <ui-button href="http://147.139.3.9:8000/login" class="ml-2" sm>Link</ui-button> -->
-          <ui-button @click=${this.link} class="ml-2" sm>Link</ui-button>
-        </div>
-        <div class="my-4 ${when(!this.twitter, () => 'hidden')}">Twitter: ${this.twitter}</div>
+        ${when(this.account && !this.twitter, () => {
+          this.updateTwitter()
+          return html`<div class="my-4">
+            Link your twitter to continue
+            <ui-button
+              href="http://147.139.3.9:8000/login?address=${this.account}"
+              @click=${this.link}
+              class="ml-2 ${when(this.twitter, () => 'hidden')}"
+              ?disabled=${this.linking}
+              sm
+              >${when(
+                this.linking,
+                () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`,
+                () => 'Link'
+              )}</ui-button
+            >
+          </div>`
+        })}
+        ${when(this.twitter, () => html`<div class="my-4">Twitter: ${this.twitter.name}</div>`)}
         ${when(
           this.account && this.twitter,
           () =>
