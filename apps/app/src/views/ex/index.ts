@@ -1,12 +1,12 @@
-import { TailwindElement, html, customElement, when, state, until } from '@fans3/ui/src/shared/TailwindElement'
-import { bridgeStore, StateController, getContract, getAccount } from '@fans3/ethers/src/useBridge'
+import { TailwindElement, html, customElement, when, state, until, repeat } from '@fans3/ui/src/shared/TailwindElement'
+import { bridgeStore, StateController, getContract } from '@fans3/ethers/src/useBridge'
 
-import { goto } from '@fans3/ui/src/shared/router'
 // Components
 import '@fans3/ui/src/connect-wallet/btn'
 
 import logo from '~/assets/logo.svg'
 import { ethers } from 'ethers'
+import { CONTRACT_ADDRESS } from '~/constants'
 
 @customElement('view-ex')
 export class ViewEx extends TailwindElement({}) {
@@ -16,54 +16,74 @@ export class ViewEx extends TailwindElement({}) {
   @state() buying = false
   @state() selling = false
   @state() err: any
+  @state() supply = 0
 
   @state()
-  private supply = getContract('Fans3Shares', { address: '0xa026b720ec05f37e161c65bbe39fda5e0f6ebb9f' }).then(
-    (contract) => {
-      return contract.sharesSupply(this.shareHolder).then((supply) => {
-        console.log(supply)
+  private updateSupply = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+    return contract
+      .sharesSupply(this.shareHolder)
+      .then((supply) => {
+        this.supply = supply
         return supply
       })
-    }
-  )
+      .catch(() => {
+        return 0
+      })
+  })
 
   @state()
-  private price = getContract('Fans3Shares', { address: '0xa026b720ec05f37e161c65bbe39fda5e0f6ebb9f' }).then(
-    (contract) => {
-      return contract.getBuyPrice(this.shareHolder, 1).then((price) => {
-        return ethers.formatEther(price)
-      })
-    }
-  )
+  private price = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+    return contract.getBuyPrice(this.shareHolder, 1).then((price) => {
+      return ethers.formatEther(price)
+    })
+  })
 
   @state()
-  private buyPrice = getContract('Fans3Shares', { address: '0xa026b720ec05f37e161c65bbe39fda5e0f6ebb9f' }).then(
-    (contract) => {
-      return contract.getBuyPriceAfterFee(this.shareHolder, 1).then((price) => {
-        return ethers.formatEther(price)
-      })
-    }
-  )
+  private buyPrice = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+    return contract.getBuyPrice(this.shareHolder, 1).then((price) => {
+      return ethers.formatEther(price)
+    })
+  })
 
   @state()
-  private sellPrice = getContract('Fans3Shares', { address: '0xa026b720ec05f37e161c65bbe39fda5e0f6ebb9f' }).then(
-    (contract) => {
-      return contract.getSellPriceAfterFee(this.shareHolder, 1).then((price) => {
-        return ethers.formatEther(price)
-      })
-    }
-  )
+  private sellPrice = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+    return contract.getSellPrice(this.shareHolder, 1).then((price) => {
+      return ethers.formatEther(price)
+    })
+  })
 
   get account() {
     return bridgeStore.account
   }
+
+  holding(item: any) {
+    return getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+      return contract
+        .sharesBalance(this.shareHolder, item)
+        .then((balance) => {
+          return balance
+        })
+        .catch(() => {
+          return 0
+        })
+    })
+  }
+
+  @state()
+  private holders = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+    return contract.getFansOfSubject(this.shareHolder).then((fans) => {
+      return html`<ul>
+        ${repeat(fans, (item) => html` <li>${item}: ${until(this.holding(item))}</li>`)}
+      </ul>`
+    })
+  })
 
   link() {}
 
   async buy() {
     this.buying = true
     try {
-      let contract = await getContract('Fans3Shares', { address: '0xa026b720ec05f37e161c65bbe39fda5e0f6ebb9f' })
+      let contract = await getContract('Fans3Shares', { address: CONTRACT_ADDRESS })
       let price = await contract.getBuyPriceAfterFee(this.shareHolder, 1)
       let tx = await contract.buyShares(this.shareHolder, 1, { value: price })
       await tx.wait()
@@ -76,7 +96,7 @@ export class ViewEx extends TailwindElement({}) {
   async sell() {
     this.selling = true
     try {
-      let contract = await getContract('Fans3Shares', { address: '0xa026b720ec05f37e161c65bbe39fda5e0f6ebb9f' })
+      let contract = await getContract('Fans3Shares', { address: CONTRACT_ADDRESS })
       let tx = await contract.sellShares(this.shareHolder, 1)
       await tx.wait()
     } catch (e) {
@@ -91,6 +111,7 @@ export class ViewEx extends TailwindElement({}) {
         <img class="w-24 object-contain select-none pointer-events-none" src="${logo}" />
       </div>
       <div class="ui-container">
+        ${when(this.err, () => html`<span class="text-red-500">${this.err}</span>`)}
         <div class="my-4">
           Wallet Address:
           <connect-wallet-btn></connect-wallet-btn>
@@ -98,12 +119,13 @@ export class ViewEx extends TailwindElement({}) {
         <div class="my-4 ${when(!this.twitter, () => 'hidden')}">Twitter: ${this.twitter}</div>
         <div class="my-4">
           <span>You are viewing ${this.shareHolder}'s shares</span><br />
-          <span>Holding: ${until(this.supply, html`<i class="text-sm mdi mdi-loading"></i>`)}</span><br />
+          <span>Holding: ${until(this.updateSupply, html`<i class="text-sm mdi mdi-loading"></i>`)}</span><br />
           <span>Price: ${until(this.price, html`<i class="text-sm mdi mdi-loading"></i>`)}</span>
         </div>
         <div class="my-4 ${when(this.account, () => 'hidden')}">Connect your wallet to buy/sell shares</div>
         <div class="my-4 ${when(this.twitter, () => 'hidden')}">
-          <ui-button sm class="my-2" @click=${this.link}>Link your twitter to buy/sell shares</ui-button>
+          Link your twitter to buy/sell shares
+          <ui-button href="http://147.139.3.9:8000/login" class="ml-2" sm>Link</ui-button>
         </div>
         <div class="my-4">
           Buy price: ${until(this.buyPrice, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}
@@ -115,7 +137,10 @@ export class ViewEx extends TailwindElement({}) {
             >Sell${when(this.selling, () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}</ui-button
           >
         </div>
-        ${when(this.err, () => html`<span class="text-red-500">${this.err}</span>`)}
+        <div class="my-4">
+          <span class="my-2">Holdings: of ${this.shareHolder}</span><br />
+          ${when(this.supply, () => html`${until(this.holders, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}`)}
+        </div>
       </div>
     </div>`
   }

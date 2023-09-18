@@ -1,12 +1,12 @@
-import { TailwindElement, html, customElement, when, state, until } from '@fans3/ui/src/shared/TailwindElement'
+import { TailwindElement, html, customElement, when, state, until, repeat } from '@fans3/ui/src/shared/TailwindElement'
 import { bridgeStore, getContract, StateController } from '@fans3/ethers/src/useBridge'
-import { goto } from '@fans3/ui/src/shared/router'
 // Components
 import '@fans3/ui/src/connect-wallet/btn'
 
 // Style
 import style from './index.css?inline'
 import logo from '~/assets/logo.svg'
+import { CONTRACT_ADDRESS } from '~/constants'
 
 @customElement('view-home')
 export class ViewHome extends TailwindElement(style) {
@@ -21,19 +21,17 @@ export class ViewHome extends TailwindElement(style) {
   }
 
   @state()
-  private updateSupply = getContract('Fans3Shares', { address: '0xa026b720ec05f37e161c65bbe39fda5e0f6ebb9f' }).then(
-    (contract) => {
-      return contract
-        .sharesSupply(this.account)
-        .then((supply) => {
-          this.supply = supply
-          return supply
-        })
-        .catch(() => {
-          return 0
-        })
-    }
-  )
+  private updateSupply = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+    return contract
+      .sharesSupply(this.account)
+      .then((supply) => {
+        this.supply = supply
+        return supply
+      })
+      .catch(() => {
+        return 0
+      })
+  })
 
   link() {
     this.twitter = 'VitalikButerin'
@@ -42,15 +40,38 @@ export class ViewHome extends TailwindElement(style) {
   async create() {
     this.creating = true
     try {
-      let contract = await getContract('Fans3Shares', { address: '0xa026b720ec05f37e161c65bbe39fda5e0f6ebb9f' })
+      let contract = await getContract('Fans3Shares', { address: CONTRACT_ADDRESS })
       let price = await contract.getBuyPriceAfterFee(this.account, 1)
       let tx = await contract.buyShares(this.account, 1, { value: price })
       await tx.wait()
+      this.updateSupply
     } catch (e) {
       this.err = e
     }
     this.creating = false
   }
+
+  holding(item: any) {
+    return getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+      return contract
+        .sharesBalance(this.account, item)
+        .then((balance) => {
+          return balance
+        })
+        .catch(() => {
+          return 0
+        })
+    })
+  }
+
+  @state()
+  private holders = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+    return contract.getFansOfSubject(this.account).then((fans) => {
+      return html`<ul>
+        ${repeat(fans, (item) => html` <li>${item}: ${until(this.holding(item))}</li>`)}
+      </ul>`
+    })
+  })
 
   render() {
     return html`<div class="home">
@@ -72,16 +93,20 @@ export class ViewHome extends TailwindElement(style) {
         ${when(
           this.account && this.twitter,
           () =>
-            html`<div class="my-4">
-              ${until(this.updateSupply, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)} holdings<br />
-              <ui-button
-                sm
-                class="my-2 ${when(this.supply, () => 'hidden')}"
-                ?disabled=${this.creating}
-                @click=${this.create}
-                >Create${when(this.creating, () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}</ui-button
-              >
-            </div>`
+            html`<ui-button href="/x/${this.account}" class="my-2" sm>Link to buy my share</ui-button>
+              <div class="my-4">
+                <span class="my-2"
+                  >${until(this.updateSupply, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)} holdings</span
+                ><br />
+                ${when(
+                  this.supply,
+                  () => html`${until(this.holders, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}`,
+                  () =>
+                    html` <ui-button sm class="my-2 " ?disabled=${this.creating} @click=${this.create}
+                      >Create${when(this.creating, () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}</ui-button
+                    >`
+                )}
+              </div>`
         )}
       </div>
     </div>`
