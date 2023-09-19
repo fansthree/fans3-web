@@ -6,7 +6,7 @@ import '@fans3/ui/src/connect-wallet/btn'
 
 import logo from '~/assets/logo.svg'
 import { ethers } from 'ethers'
-import { CONTRACT_ADDRESS } from '~/constants'
+import { API_URL, CONTRACT_ADDRESS } from '~/constants'
 import { holding, twitterName } from '~/utils'
 import { sleep } from '@fans3/ethers/src/utils'
 import { SECOND } from '@fans3/core/src/constants/time'
@@ -23,7 +23,7 @@ export class ViewEx extends TailwindElement({}) {
   @state() supply = 0
 
   updateTwitter() {
-    return fetch('http://147.139.3.9:8000/user?address=' + this.account)
+    return fetch(API_URL + '/user?address=' + this.account)
       .then((blob) => blob.json())
       .then((data) => {
         this.twitter = data
@@ -92,7 +92,7 @@ export class ViewEx extends TailwindElement({}) {
     this.linking = true
     while (true) {
       try {
-        let twitter = await fetch('http://147.139.3.9:8000/user?address=' + this.account, { mode: 'no-cors' })
+        let twitter = await fetch(API_URL + '/user?address=' + this.account, { mode: 'no-cors' })
         this.twitter = await twitter.json()
         return
       } catch (e) {
@@ -157,7 +157,7 @@ export class ViewEx extends TailwindElement({}) {
           return html`<div class="my-4">
             Link your twitter to continue
             <ui-button
-              href="http://147.139.3.9:8000/login?address=${this.account}"
+              href="${API_URL}/login?address=${this.account}"
               @click=${this.link}
               class="ml-2 ${when(this.twitter, () => 'hidden')}"
               ?disabled=${this.linking}
