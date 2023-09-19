@@ -111,7 +111,7 @@ export class ViewHome extends TailwindElement(style) {
             <ui-button
               href="${API_URL}/login?address=${this.account}"
               @click=${this.link}
-              class="ml-2 ${when(this.twitter, () => 'hidden')}"
+              class="ml-2 uppercase ${when(this.twitter, () => 'hidden')}"
               ?disabled=${this.linking}
               sm
               >${when(
@@ -126,7 +126,7 @@ export class ViewHome extends TailwindElement(style) {
         ${when(
           this.account && this.twitter,
           () =>
-            html`<ui-button href="/x/${this.account}" class="my-2" sm>Link to buy my share</ui-button>
+            html`<ui-link href="/x/${this.account}" class="my-2">Link to buy my share</ui-link>
               <div class="my-4">
                 <span class="my-2"
                   >${until(this.updateSupply, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)} holdings</span
