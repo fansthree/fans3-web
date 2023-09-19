@@ -1,10 +1,10 @@
 .ui-link {
-  @apply no-underline;
-  color: var(--a_color);
+  @apply underline text-primary transition duration-150 ease-in-out;
+  /* color: var(--a_color); */
   &:hover {
-    @apply underline;
-    color: var(--a_color);
-    text-decoration: underline;
+    @apply no-underline text-primary-600 decoration-transparent;
+    /* color: var(--a_color); */
+    /* text-decoration: underline; */
   }
   &:not([disabled]) {
     @apply cursor-pointer;
@@ -41,8 +41,8 @@
     }
     &[active],
     &[exact-active] {
-      color: var(--a_color);
-      @apply border-b-current;
+      /* color: var(--a_color); */
+      @apply border-b-current text-primary-700;
     }
   }
   &[link] {
