@@ -6,7 +6,10 @@ export { Router }
 const bareOrigin = (url: string) => url.replace(location.origin, '')
 const match = (url: any) => bareOrigin(encodeURIComponent(location.href)) === bareOrigin(url)
 
-export const routerPathname = (path = location.href) => new URL(path).pathname
+export const routerPathname = (path = location.href) => {
+  if (!/^[^/]+:/.test(path)) path = `blob:${path}`
+  return new URL(path).pathname
+}
 export const routerPathroot = (path?: string) => routerPathname(path).replace(/^(\/\w+)\/?.*?$/, '$1')
 
 export const scrollTop = (y = 0) => setTimeout(() => globalThis.scrollTo(0, y))
