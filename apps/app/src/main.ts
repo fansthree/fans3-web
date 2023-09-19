@@ -5,6 +5,7 @@ import { routes } from '~/router'
 import { TailwindElement, html, customElement, state, when } from '@fans3/ui/src/shared/TailwindElement'
 // Components
 import '@fans3/ui/src/link'
+import '@fans3/ui/src/network-warning'
 
 @customElement('app-main')
 export class AppMain extends TailwindElement('') {
@@ -25,7 +26,7 @@ export class AppMain extends TailwindElement('') {
   }
 
   render() {
-    return html`
+    return html`<network-warning></network-warning>
       <main class="app-main p-4">
         <slot></slot>
       </main>`

@@ -6,7 +6,7 @@ import '@fans3/ui/src/connect-wallet/btn'
 
 import logo from '~/assets/logo.svg'
 import { ethers } from 'ethers'
-import { API_URL, CONTRACT_ADDRESS } from '~/constants'
+import { API_URL } from '~/constants'
 import { holding, twitterName } from '~/utils'
 import { sleep } from '@fans3/ethers/src/utils'
 import { SECOND } from '@fans3/core/src/constants/time'
@@ -35,7 +35,7 @@ export class ViewEx extends TailwindElement({}) {
   }
 
   @state()
-  private updateSupply = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+  private updateSupply = getContract('Fans3Shares').then((contract) => {
     return contract
       .sharesSupply(this.shareHolder)
       .then((supply) => {
@@ -48,21 +48,21 @@ export class ViewEx extends TailwindElement({}) {
   })
 
   @state()
-  private price = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+  private price = getContract('Fans3Shares').then((contract) => {
     return contract.getBuyPrice(this.shareHolder, 1).then((price) => {
       return ethers.formatEther(price)
     })
   })
 
   @state()
-  private buyPrice = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+  private buyPrice = getContract('Fans3Shares').then((contract) => {
     return contract.getBuyPrice(this.shareHolder, 1).then((price) => {
       return ethers.formatEther(price)
     })
   })
 
   @state()
-  private sellPrice = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+  private sellPrice = getContract('Fans3Shares').then((contract) => {
     return contract.getSellPrice(this.shareHolder, 1).then((price) => {
       return ethers.formatEther(price)
     })
@@ -73,7 +73,7 @@ export class ViewEx extends TailwindElement({}) {
   }
 
   @state()
-  private holders = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+  private holders = getContract('Fans3Shares').then((contract) => {
     return contract.getFansOfSubject(this.shareHolder).then((fans) => {
       return html`<ul>
         ${repeat(
@@ -105,7 +105,7 @@ export class ViewEx extends TailwindElement({}) {
   async buy() {
     this.buying = true
     try {
-      let contract = await getContract('Fans3Shares', { address: CONTRACT_ADDRESS })
+      let contract = await getContract('Fans3Shares')
       let price = await contract.getBuyPriceAfterFee(this.shareHolder, 1)
       let tx = await contract.buyShares(this.shareHolder, 1, { value: price })
       await tx.wait()
@@ -118,7 +118,7 @@ export class ViewEx extends TailwindElement({}) {
   async sell() {
     this.selling = true
     try {
-      let contract = await getContract('Fans3Shares', { address: CONTRACT_ADDRESS })
+      let contract = await getContract('Fans3Shares')
       let tx = await contract.sellShares(this.shareHolder, 1)
       await tx.wait()
     } catch (e) {

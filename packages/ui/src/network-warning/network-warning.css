@@ -1,0 +1,6 @@
+.network-warning {
+  @apply h-0;
+  &.shown {
+    height: var(--networkWarnH);
+  }
+}

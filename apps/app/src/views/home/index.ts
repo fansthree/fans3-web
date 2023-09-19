@@ -6,7 +6,7 @@ import '@fans3/ui/src/connect-wallet/btn'
 // Style
 import style from './index.css?inline'
 import logo from '~/assets/logo.svg'
-import { API_URL, CONTRACT_ADDRESS } from '~/constants'
+import { API_URL } from '~/constants'
 import { sleep } from '@fans3/ethers/src/utils'
 import { SECOND } from '@fans3/core/src/constants/time'
 import { holding, twitterName } from '~/utils'
@@ -37,7 +37,7 @@ export class ViewHome extends TailwindElement(style) {
   }
 
   @state()
-  private updateSupply = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+  private updateSupply = getContract('Fans3Shares').then((contract) => {
     return contract
       .sharesSupply(this.account)
       .then((supply) => {
@@ -66,7 +66,7 @@ export class ViewHome extends TailwindElement(style) {
   async create() {
     this.creating = true
     try {
-      let contract = await getContract('Fans3Shares', { address: CONTRACT_ADDRESS })
+      let contract = await getContract('Fans3Shares')
       let price = await contract.getBuyPriceAfterFee(this.account, 1)
       let tx = await contract.buyShares(this.account, 1, { value: price })
       await tx.wait()
@@ -78,7 +78,7 @@ export class ViewHome extends TailwindElement(style) {
   }
 
   @state()
-  private holders = getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+  private holders = getContract('Fans3Shares').then((contract) => {
     return contract.getFansOfSubject(this.account).then((fans) => {
       return html`<ul>
         ${repeat(

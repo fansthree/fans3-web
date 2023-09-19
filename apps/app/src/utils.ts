@@ -1,5 +1,5 @@
 import { getContract } from '@fans3/ethers/src/useBridge'
-import { API_URL, CONTRACT_ADDRESS } from './constants'
+import { API_URL } from './constants'
 import { html } from '@fans3/ui/src/shared/TailwindElement'
 import '@fans3/ui/src/link'
 
@@ -12,7 +12,7 @@ export const twitterName = (item: any) => {
 }
 
 export const holding = (holdee: any, holder: any) => {
-  return getContract('Fans3Shares', { address: CONTRACT_ADDRESS }).then((contract) => {
+  return getContract('Fans3Shares').then((contract) => {
     return contract
       .sharesBalance(holdee, holder)
       .then((balance) => {
