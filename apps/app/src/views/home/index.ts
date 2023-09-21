@@ -126,7 +126,7 @@ export class ViewHome extends TailwindElement(style) {
         ${when(
           this.account && this.twitter,
           () =>
-            html`<ui-link href="/x/${this.account}" class="my-2">Link to buy my share</ui-link>
+            html`<ui-link link href="/x/${this.account}" class="my-2">Link to buy my share</ui-link>
               <div class="my-4">
                 <span class="my-2"
                   >${until(this.updateSupply, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)} holdings</span

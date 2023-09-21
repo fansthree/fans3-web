@@ -1,11 +1,16 @@
 .ui-link {
-  @apply underline text-primary transition duration-150 ease-in-out;
+  @apply no-underline text-primary transition duration-150 ease-in-out;
   /* color: var(--a_color); */
-  &:hover {
-    @apply no-underline text-primary-600 decoration-transparent;
+  &:hover,
+  &:focus {
+    @apply underline text-primary-600 decoration-transparent;
     /* color: var(--a_color); */
     /* text-decoration: underline; */
   }
+  &:active {
+    @apply text-primary-700;
+  }
+
   &:not([disabled]) {
     @apply cursor-pointer;
   }
@@ -20,10 +25,14 @@
     }
   }
   &.link {
-    color: var(--colorSecondary);
-    &:hover {
-      color: var(--colorSecondary);
+    @apply text-secondary transition duration-150 ease-in-out;
+    &:hover,
+    &:focus {
+      @apply text-secondary-600;
       text-decoration: underline;
+    }
+    &:active {
+      @apply text-secondary-700;
     }
   }
   &.router-active {
@@ -53,6 +62,16 @@
 
     &:hover {
       @apply underline;
+    }
+  }
+  &[theme='dark'] {
+    @apply text-primary-400;
+    &:hover,
+    &:focus {
+      @apply text-primary-500;
+    }
+    &:active {
+      @apply text-primary-600;
     }
   }
 }

@@ -179,6 +179,13 @@
     }
   }
   &[theme='dark'] {
-    background: var(--colorDark) !important;
+    @apply shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)];
+    &:hover,
+    &:active {
+      @apply shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)];
+    }
+    &:focus {
+      @apply shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)];
+    }
   }
 }

@@ -7,7 +7,7 @@ export const twitterName = (item: any) => {
   return fetch(API_URL + '/user?address=' + item)
     .then((blob) => blob.json())
     .then((data) => {
-      return html`<ui-link href="https://twitter.com/intent/user?user_id=${data.t_id}">${data.name}</ui-link>`
+      return html`<ui-link link href="https://twitter.com/intent/user?user_id=${data.t_id}">${data.name}</ui-link>`
     })
 }
 
