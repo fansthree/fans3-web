@@ -10,6 +10,7 @@ import { API_URL } from '~/constants'
 import { sleep } from '@fans3/ethers/src/utils'
 import { SECOND } from '@fans3/core/src/constants/time'
 import { holding, twitterName } from '~/utils'
+import emitter from '@fans3/core/src/emitter'
 
 @customElement('view-home')
 export class ViewHome extends TailwindElement(style) {
@@ -24,7 +25,17 @@ export class ViewHome extends TailwindElement(style) {
     return bridgeStore.account
   }
 
+  connectedCallback() {
+    super.connectedCallback()
+    emitter.on('wallet-changed', async () => {
+      this.linking = true
+      this.twitter = ''
+      await this.updateTwitter()
+    })
+  }
+
   updateTwitter() {
+    if (!this.account) return Promise
     return fetch(API_URL + '/user?address=' + this.account)
       .then((blob) => blob.json())
       .then((data) => {
@@ -122,11 +133,11 @@ export class ViewHome extends TailwindElement(style) {
             >
           </div>`
         })}
-        ${when(this.twitter, () => html`<div class="my-4">Twitter: ${this.twitter.name}</div>`)}
         ${when(
           this.account && this.twitter,
           () =>
-            html`<ui-link link href="/x/${this.account}" class="my-2">Link to buy my share</ui-link>
+            html`<div class="my-4">Twitter: ${this.twitter.name}</div>
+              <ui-link link href="/x/${this.account}" class="my-2">Link to buy my share</ui-link>
               <div class="my-4">
                 <span class="my-2"
                   >${until(this.updateSupply, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)} holdings</span

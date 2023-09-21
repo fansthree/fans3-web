@@ -10,6 +10,7 @@ import { API_URL } from '~/constants'
 import { holding, twitterName } from '~/utils'
 import { sleep } from '@fans3/ethers/src/utils'
 import { SECOND } from '@fans3/core/src/constants/time'
+import emitter from '@fans3/core/src/emitter'
 
 @customElement('view-ex')
 export class ViewEx extends TailwindElement({}) {
@@ -22,7 +23,17 @@ export class ViewEx extends TailwindElement({}) {
   @state() err: any
   @state() supply = 0
 
+  connectedCallback() {
+    super.connectedCallback()
+    emitter.on('wallet-changed', async () => {
+      this.linking = true
+      this.twitter = ''
+      await this.updateTwitter()
+    })
+  }
+
   updateTwitter() {
+    if (!this.account) return Promise
     return fetch(API_URL + '/user?address=' + this.account)
       .then((blob) => blob.json())
       .then((data) => {
