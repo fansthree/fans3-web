@@ -19,6 +19,24 @@ export const routes = [
       await import('~/views/ex')
       return true
     }
+  },
+  {
+    name: 'tg-create',
+    path: '/tg/create',
+    render: () => html`<tg-create></tg-create>`,
+    enter: async () => {
+      await import('~/views/tg/create')
+      return true
+    }
+  },
+  {
+    name: 'tg-buy',
+    path: '/tg/buy/:shareHolder?',
+    render: ({ shareHolder = '' }) => html`<tg-buy .shareHolder=${safeDecodeURIComponent(shareHolder)}></tg-buy>`,
+    enter: async () => {
+      await import('~/views/tg/buy')
+      return true
+    }
   }
 ]
 
