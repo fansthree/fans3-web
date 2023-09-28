@@ -37,6 +37,15 @@ export const routes = [
       await import('~/views/tg/buy')
       return true
     }
+  },
+  {
+    name: 'tg-verify',
+    path: '/tg/verify/:tgUser?',
+    render: ({ tgUser = '' }) => html`<tg-verify .tgUser=${safeDecodeURIComponent(tgUser)}></tg-verify>`,
+    enter: async () => {
+      await import('~/views/tg/verify')
+      return true
+    }
   }
 ]
 
