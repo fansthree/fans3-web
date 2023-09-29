@@ -7,7 +7,7 @@ import '@fans3/ui/src/connect-wallet/btn'
 import logo from '~/assets/logo.svg'
 import { ethers } from 'ethers'
 import { API_URL } from '~/constants'
-import { holding, twitterName } from '~/utils'
+import { shareBalance, twitterName } from '~/utils'
 import { sleep } from '@fans3/ethers/src/utils'
 import { SECOND } from '@fans3/core/src/constants/time'
 import emitter from '@fans3/core/src/emitter'
@@ -92,7 +92,7 @@ export class ViewEx extends TailwindElement({}) {
           (item) =>
             html` <li>
               ${item}(${until(twitterName(item), html`<i class="text-sm mdi mdi-loading"></i>`)}):
-              ${until(holding(this.account, item))}
+              ${until(shareBalance(this.account, item))}
             </li>`
         )}
       </ul>`

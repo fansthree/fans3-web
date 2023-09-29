@@ -11,12 +11,38 @@ export const twitterName = (item: any) => {
     })
 }
 
-export const holding = (holdee: any, holder: any) => {
+export const shareBalance = (holdee: any, holder: any) => {
   return getContract('Fans3Shares').then((contract) => {
     return contract
       .sharesBalance(holdee, holder)
       .then((balance) => {
         return balance
+      })
+      .catch(() => {
+        return 0
+      })
+  })
+}
+
+export const shareSupply = (shareHolder: any) => {
+  return getContract('Fans3Shares').then((contract) => {
+    return contract
+      .sharesSupply(shareHolder)
+      .then((supply) => {
+        return supply
+      })
+      .catch(() => {
+        return 0
+      })
+  })
+}
+
+export const shareHolders = (shareHolder: any) => {
+  return getContract('Fans3Shares').then((contract) => {
+    return contract
+      .getFansOfSubject(shareHolder)
+      .then((fans) => {
+        return fans?.length
       })
       .catch(() => {
         return 0

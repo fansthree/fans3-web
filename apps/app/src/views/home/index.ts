@@ -9,7 +9,7 @@ import logo from '~/assets/logo.svg'
 import { API_URL } from '~/constants'
 import { sleep } from '@fans3/ethers/src/utils'
 import { SECOND } from '@fans3/core/src/constants/time'
-import { holding, twitterName } from '~/utils'
+import { shareBalance, twitterName } from '~/utils'
 import emitter from '@fans3/core/src/emitter'
 
 @customElement('view-home')
@@ -97,7 +97,7 @@ export class ViewHome extends TailwindElement(style) {
           (item) =>
             html` <li>
               ${item}(${until(twitterName(item), html`<i class="text-sm mdi mdi-loading"></i>`)}):
-              ${until(holding(this.account, item), html`<i class="text-sm mdi mdi-loading"></i>`)}
+              ${until(shareBalance(this.account, item), html`<i class="text-sm mdi mdi-loading"></i>`)}
             </li>`
         )}
       </ul>`

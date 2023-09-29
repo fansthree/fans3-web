@@ -6,7 +6,8 @@ import '@fans3/ui/src/connect-wallet/btn'
 
 import logo from '~/assets/logo.svg'
 import { ethers } from 'ethers'
-import { holding } from '~/utils'
+import { shareBalance, shareSupply } from '~/utils'
+import emitter from '@fans3/core/src/emitter'
 
 @customElement('tg-buy')
 export class TGBuy extends TailwindElement({}) {
@@ -15,20 +16,7 @@ export class TGBuy extends TailwindElement({}) {
   @state() buying = false
   @state() selling = false
   @state() err: any
-  @state() supply = 0
-
-  @state()
-  private updateSupply = getContract('Fans3Shares').then((contract) => {
-    return contract
-      .sharesSupply(this.shareHolder)
-      .then((supply) => {
-        this.supply = supply
-        return supply
-      })
-      .catch(() => {
-        return 0
-      })
-  })
+  @state() numSupply: number | undefined
 
   @state()
   private price = getContract('Fans3Shares').then((contract) => {
@@ -51,6 +39,20 @@ export class TGBuy extends TailwindElement({}) {
     })
   })
 
+  async reloadSupply() {
+    console.debug('got account', bridgeStore.account)
+    if (!bridgeStore.account) return
+    console.debug('load supply')
+    this.numSupply = await shareSupply(bridgeStore.account)
+    this.requestUpdate()
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback()
+    if (this.account) this.reloadSupply()
+    else emitter.on('wallet-changed', this.reloadSupply.bind(this))
+  }
+
   get account() {
     return bridgeStore.account
   }
@@ -59,7 +61,7 @@ export class TGBuy extends TailwindElement({}) {
   private holders = getContract('Fans3Shares').then((contract) => {
     return contract.getFansOfSubject(this.shareHolder).then((fans) => {
       return html`<ul>
-        ${repeat(fans, (item) => html` <li>${item}: ${until(holding(this.account, item))}</li>`)}
+        ${repeat(fans, (item) => html` <li>${item}: ${until(shareBalance(this.account, item))}</li>`)}
       </ul>`
     })
   })
@@ -100,26 +102,30 @@ export class TGBuy extends TailwindElement({}) {
           Wallet Address:
           <connect-wallet-btn></connect-wallet-btn>
         </div>
-        <div class="my-4">
+        <p>
           <span>You are viewing ${this.shareHolder}'s shares</span><br />
-          <span>Holding: ${until(this.updateSupply, html`<i class="text-sm mdi mdi-loading"></i>`)}</span><br />
+          <span>Shares: ${until(this.numSupply, html`<i class="text-sm mdi mdi-loading"></i>`)}</span><br />
           <span>Price: ${until(this.price, html`<i class="text-sm mdi mdi-loading"></i>`)}</span>
-        </div>
+        </p>
         <div class="my-4 ${when(this.account, () => 'hidden')}">Connect your wallet to buy/sell shares</div>
-        <div class="my-4">
+        <p>
           Buy price: ${until(this.buyPrice, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}
           <ui-button sm class="m-2" ?disabled=${this.buying} @click=${this.buy}
             >Buy${when(this.buying, () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}</ui-button
-          ><br />
-          Sell price: ${until(this.sellPrice, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}
-          <ui-button sm class="m-2" ?disabled=${this.selling} @click=${this.sell}
-            >Sell${when(this.selling, () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}</ui-button
           >
-        </div>
-        <div class="my-4">
-          <span class="my-2">Holdings:</span><br />
-          ${when(this.supply, () => html`${until(this.holders, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}`)}
-        </div>
+        </p>
+        ${when(
+          this.numSupply != undefined,
+          () =>
+            html`<p>
+                Sell price: ${until(this.sellPrice, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}
+                <ui-button sm class="m-2" ?disabled=${this.selling} @click=${this.sell}
+                  >Sell${when(this.selling, () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}</ui-button
+                >
+              </p>
+              <p class="my-2">Holders:</p>
+              ${until(this.holders, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}`
+        )}
       </div>
     </div>`
   }
