@@ -106,24 +106,15 @@ export class TGCreate extends TailwindElement({}) {
                     () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`
                   )}
                 </p>
-                ${choose(
+                ${when(
                   this.numSupply,
-                  [
-                    [undefined, () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`],
-                    [
-                      0,
-                      () =>
-                        html`<ui-button sm class="my-2" ?disabled=${this.creating} @click=${this.create}
-                          >Create${when(
-                            this.creating,
-                            () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`
-                          )}</ui-button
-                        >`
-                    ]
-                  ],
                   () =>
                     html`<p>Holders:</p>
-                      ${until(this.holders, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}`
+                      ${until(this.holders, html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}`,
+                  () =>
+                    html`<ui-button sm class="my-2" ?disabled=${this.creating} @click=${this.create}
+                      >Create${when(this.creating, () => html`<i class="ml-2 text-sm mdi mdi-loading"></i>`)}</ui-button
+                    >`
                 )}
               </div>`
         )}
